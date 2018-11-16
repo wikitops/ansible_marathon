@@ -1,0 +1,51 @@
+---
+
+- name: MARATHON | Add Mesosphere key on remote server
+  apt_key:
+    id: E56151BF
+    keyserver: keyserver.ubuntu.com
+    state: present
+
+- name: MARATHON | Add Mesosphere repository on remote server
+  apt_repository:
+    repo: deb {{ marathon_apt_url }} {{ ansible_distribution_release | lower }} main
+    state: present
+    update_cache: yes
+
+- name: MARATHON | Install Marathon on remote server
+  apt:
+    name: marathon
+    update_cache: yes
+    state: present
+
+- name: MARATHON | Create Marathon directory
+  file:
+    state: directory
+    path: /etc/marathon/conf
+    mode: 0755
+    owner: root
+    group: root
+
+- name: MARATHON | Configure Marathon on remote system
+  template:
+    src: "{{ item }}.j2"
+    dest: "/{{ item }}"
+    owner: root
+    group: root
+    mode: 0664
+  with_items:
+    - "etc/default/marathon"
+  notify: Restart marathon
+#
+# - name: Configure Marathon systemd service
+#   template:
+#     src: "{{ item }}.j2"
+#     dest: "/{{ item }}"
+#     owner: root
+#     group: root
+#     mode: 0664
+#   with_items:
+#     - "lib/systemd/system/mesos-master.service"
+#   when: inventory_hostname in groups['master']
+#   notify:
+#     - Restart marathon
