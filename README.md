@@ -43,7 +43,7 @@ Current machine states:
 marathon01                   running (virtualbox)
 ```
 
-If everything run as expected, you should have a Marathon instance up and running.
+If everything run as expected, you should have a Marathon instance up and running : http://10.0.5.171:8080/
 
 #### Destroy
 

@@ -3,8 +3,8 @@
 
 # List of supported operating systems
 SUPPORTED_OS = {
-  "debian"   => {box: "debian/jessie64", bootstrap_os: "debian", user: "vagrant"},
-  "ubuntu"   => {box: "ubuntu/bionic64", bootstrap_os: "ubuntu", user: "vagrant"},
+  "debian"   => {box: "debian/wheezy64", bootstrap_os: "debian", user: "vagrant"},
+  "ubuntu"   => {box: "ubuntu/xenial64", bootstrap_os: "ubuntu", user: "vagrant"},
   "centos"   => {box: "centos/7",        bootstrap_os: "centos", user: "vagrant"}
 }
 
@@ -57,7 +57,8 @@ Vagrant.configure("2") do |config|
       server.vm.network "private_network", ip: "#{$subnet}#{i}"
 
       host_vars[vm_name] = {
-        "ip": "#{$subnet}#{i}"
+        "ip": "#{$subnet}#{i}",
+        "myid": "#{i}"
       }
 
       # Provision
@@ -77,7 +78,8 @@ Vagrant.configure("2") do |config|
           ansible.limit               = "all"
           ansible.host_key_checking   = false
           ansible.groups = {
-            "marathon" => ["#{$instance_name_prefix}01"]
+            "marathon" => ["#{$instance_name_prefix}01"],
+            "zookeeper" => ["#{$instance_name_prefix}01"],
           }
         end
       end

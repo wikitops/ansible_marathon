@@ -1,5 +1,11 @@
 ---
 
+- hosts: zookeeper
+  remote_user: vagrant
+  become: yes
+  roles:
+    - zookeeper
+
 - hosts: marathon
   remote_user: vagrant
   become: yes
